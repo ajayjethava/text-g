@@ -54,10 +54,9 @@ def load_large_sample_text():
     upon the place beneath it is twice blest it blesseth him that gives and him that takes
     """
     
-    # Clean and format text
     text = text.lower()
     text = text.replace('\n', ' ')
-    text = ' '.join(text.split())  # Remove extra spaces
+    text = ' '.join(text.split())  
     return text
 
 def create_model(vocab_size, seq_length=100):
@@ -80,7 +79,6 @@ def create_model(vocab_size, seq_length=100):
 
 def prepare_data_with_paragraphs(text, seq_length=100, step=3):
     """Prepare training data preserving sentence structure"""
-    # Get unique characters including punctuation
     chars = sorted(list(set(text)))
     char_to_int = {ch: i for i, ch in enumerate(chars)}
     int_to_char = {i: ch for i, ch in enumerate(chars)}
@@ -136,7 +134,7 @@ def generate_paragraphs(model, seed_text, char_to_int, int_to_char, seq_length,
         while sentences_generated < sentences_per_para:
             # Prepare current seed
             current_seed = all_generated[-seq_length:] if len(all_generated) >= seq_length else all_generated
-            current_seed = current_seed.ljust(seq_length, ' ')  # Pad if needed
+            current_seed = current_seed.ljust(seq_length, ' ')  
             
             # Prepare input
             x_pred = np.zeros((1, seq_length, len(char_to_int)))
@@ -201,26 +199,26 @@ def format_paragraph(text, line_width=70):
 def interactive_generation():
     """Main interactive function"""
     print("\n" + "="*60)
-    print("📝 ENHANCED TEXT GENERATOR WITH PARAGRAPHS")
+    print(" ENHANCED TEXT GENERATOR WITH PARAGRAPHS")
     print("="*60)
     
     # Load larger text
-    print("\n📚 Loading training text...")
+    print("\n Loading training text...")
     text = load_large_sample_text()
-    print(f"✓ Loaded {len(text)} characters")
+    print(f" Loaded {len(text)} characters")
     print(f"Sample: {text[:100]}...")
     
     # Prepare data
     seq_length = 100
-    print(f"\n⚙️ Preparing data with sequence length: {seq_length}")
+    print(f"\n Preparing data with sequence length: {seq_length}")
     X, y, char_to_int, int_to_char, vocab_size = prepare_data_with_paragraphs(text, seq_length)
     
     # Create model
-    print("\n🧠 Creating neural network...")
+    print("\n Creating neural network...")
     model = create_model(vocab_size, seq_length)
     
     # Train
-    print("\n🎯 Training model (this may take a few minutes)...")
+    print("\n Training model (this may take a few minutes)...")
     print("   Training for better paragraph generation...")
     
     model.fit(
@@ -242,7 +240,7 @@ def interactive_generation():
     # Interactive menu
     while True:
         print("\n" + "="*60)
-        print("✨ GENERATION MENU")
+        print(" GENERATION MENU")
         print("="*60)
         print("1. Generate paragraphs")
         print("2. Generate single text")
@@ -254,7 +252,7 @@ def interactive_generation():
         choice = input("\nEnter choice (1-6): ").strip()
         
         if choice == '6':
-            print("\n👋 Goodbye!")
+            print("\n Goodbye!")
             break
         
         elif choice == '3':
@@ -263,7 +261,7 @@ def interactive_generation():
             continue
         
         elif choice == '4':
-            print("\n🌡️ Temperature Testing")
+            print("\n Temperature Testing")
             seed = input("Enter seed text: ").lower().strip() or "to be or not to be"
             
             temps = [0.3, 0.5, 0.7, 1.0, 1.5]
@@ -297,11 +295,11 @@ def interactive_generation():
         
         elif choice == '5':
             model.save('paragraph_generator.h5')
-            print("✅ Model saved as 'paragraph_generator.h5'")
+            print(" Model saved as 'paragraph_generator.h5'")
             continue
         
         # Get generation parameters
-        print("\n📝 Generation Parameters:")
+        print("\n Generation Parameters:")
         seed_text = input("Enter seed text (or Enter for default): ").lower().strip()
         if not seed_text:
             seed_text = "to be or not to be"
@@ -357,7 +355,7 @@ def interactive_generation():
             print("-" * 60)
         
         # Save option
-        save = input("\n💾 Save generated text? (y/n): ").lower()
+        save = input("\n Save generated text? (y/n): ").lower()
         if save == 'y':
             filename = input("Filename (or Enter for auto): ").strip()
             if not filename:
@@ -369,11 +367,11 @@ def interactive_generation():
                 f.write(f"Length: {len(generated)}\n\n")
                 f.write(generated)
             
-            print(f"✅ Text saved to '{filename}'")
+            print(f" Text saved to '{filename}'")
 
 def quick_mode():
     """Quick generation without training"""
-    print("\n🚀 QUICK GENERATION MODE")
+    print("\n QUICK GENERATION MODE")
     print("="*60)
     
     if os.path.exists('char_maps.pkl'):
@@ -397,9 +395,9 @@ def quick_mode():
             if model_choice:
                 model_idx = int(model_choice) - 1
                 model.load_weights(models[model_idx])
-                print(f"✓ Loaded {models[model_idx]}")
+                print(f" Loaded {models[model_idx]}")
         
-        print("\n📝 Quick Generation:")
+        print("\n Quick Generation:")
         seed = input("Seed text: ").lower().strip() or "to be or not to be"
         temp = float(input("Temperature (0.7): ") or "0.7")
         length = int(input("Characters (300): ") or "300")
@@ -431,11 +429,11 @@ def quick_mode():
             print(f"  {line}")
         print("="*60)
     else:
-        print("❌ No pre-trained model found. Please run training mode first.")
+        print(" No pre-trained model found. Please run training mode first.")
 
 def main():
     print("\n" + "="*60)
-    print("🤖 ENHANCED LSTM TEXT GENERATOR")
+    print(" ENHANCED LSTM TEXT GENERATOR")
     print("="*60)
     print("This version generates full paragraphs with proper formatting!")
     
@@ -451,14 +449,14 @@ def main():
     elif choice == '2':
         quick_mode()
     else:
-        print("👋 Goodbye!")
+        print(" Goodbye!")
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n\n⚠ Program interrupted by user")
+        print("\n\n Program interrupted by user")
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n Error: {e}")
         print("\nMake sure TensorFlow is installed:")
         print("pip install tensorflow numpy")
